@@ -33,7 +33,7 @@ jobs:
 
       - name: Update kubeconfig
         run: |
-          aws eks update-kubeconfig --region sa-east-1 --name techchallenge-cluster
+          aws eks update-kubeconfig --region sa-east-1 --name techchallenge-eks
 
       - name: Deploy manifests to EKS
         run: |
