@@ -26,7 +26,7 @@ jobs:
         run: |
           IMAGE_REPO=tech-challenge-app
           IMAGE_TAG=latest
-          docker build -t $IMAGE_REPO:$IMAGE_TAG ./app
+          docker build -t $IMAGE_REPO:$IMAGE_TAG ./k8s/app
           docker tag $IMAGE_REPO:$IMAGE_TAG ${{ steps.login-ecr.outputs.registry }}/$IMAGE_REPO:$IMAGE_TAG
           docker push ${{ steps.login-ecr.outputs.registry }}/$IMAGE_REPO:$IMAGE_TAG
 
