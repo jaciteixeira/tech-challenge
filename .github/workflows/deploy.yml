@@ -36,5 +36,5 @@ jobs:
 
       - name: Deploy manifests to EKS
         run: |
-          kubectl apply -f db/
-          kubectl apply -f app/
+          kubectl apply -f k8s/db/
+          kubectl apply -f k8s/app/
