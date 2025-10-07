@@ -7,4 +7,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Mi
+      storage: 10Gi
+  storageClassName: gp2
