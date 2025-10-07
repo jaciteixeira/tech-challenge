@@ -3,9 +3,10 @@ kind: Service
 metadata:
   name: db
 spec:
+  selector:
+    app: tech-challenge-db
   ports:
-    - name: "5432"
+    - protocol: TCP
       port: 5432
       targetPort: 5432
-  selector:
-    app: tech-challenge_db
+  type: ClusterIP

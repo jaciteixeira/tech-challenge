@@ -20,7 +20,7 @@ spec:
           command: [ 'sh', '-c', 'until nc -z db 5432; do echo "Aguardando banco..."; sleep 2; done' ]
       containers:
       - name: tech-challenge-app
-        image: <aws_account_id>.dkr.ecr.sa-east-1.amazonaws.com/tech-challenge-app:latest
+        image: 065939301012.dkr.ecr.sa-east-1.amazonaws.com/tech-challenge-app:latest
         ports:
           - containerPort: 8080
         envFrom:
@@ -30,10 +30,10 @@ spec:
               name: tech-challenge-secrets
         resources:
           requests:
-            cpu: "250m"
+            cpu: "200m"
             memory: "256Mi"
           limits:
-            cpu: "500m"
+            cpu: "400m"
             memory: "512Mi"
         livenessProbe:
           httpGet:

@@ -6,36 +6,31 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tech-challenge_db
+      app: tech-challenge-db
   template:
     metadata:
       labels:
-        app: tech-challenge_db
+        app: tech-challenge-db
     spec:
       containers:
-        - envFrom:
-            - configMapRef:
-                name: db-config
+        - name: db
           image: postgres:14
-          name: db
           ports:
             - containerPort: 5432
-              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: db-config
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: db
-          livenessProbe:
-            tcpSocket:
-              port: 5432
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: 5432
-            initialDelaySeconds: 5
-            periodSeconds: 5
-      restartPolicy: Always
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
       volumes:
-        - name: db
+        - name: db-data
           persistentVolumeClaim:
             claimName: db
