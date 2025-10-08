@@ -1,3 +1,4 @@
+#db-persistentvolumeclaim.ymal
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -5,7 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: gp2
+  storageClassName: ebs-sc
   resources:
     requests:
-      storage: 5Gi  # suficiente para testes e compatível com t3.micro
+      storage: 5Gi

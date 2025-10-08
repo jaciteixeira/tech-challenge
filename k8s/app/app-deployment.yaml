@@ -1,3 +1,4 @@
+#app-deployment.ymal
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,11 +31,11 @@ spec:
               name: tech-challenge-secrets
         resources:
           requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
             cpu: "200m"
             memory: "256Mi"
-          limits:
-            cpu: "400m"
-            memory: "512Mi"
         livenessProbe:
           httpGet:
             path: /techchallenge/v1/actuator/health/liveness
