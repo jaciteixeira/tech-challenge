@@ -1,15 +1,23 @@
-name: Deploy to EKS
+name: Deploy Aplicação TechChallenge
 
 on:
   push:
+    branches:
+      - main  # Permite o deploy apenas na main, protegida via PR
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   deploy:
+    name: Deploy to EKS
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -23,18 +31,20 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_REPO: tech-challenge-app
+          IMAGE_TAG: latest
         run: |
-          IMAGE_REPO=tech-challenge-app
-          IMAGE_TAG=latest
           docker build -t $IMAGE_REPO:$IMAGE_TAG -f Dockerfile .
-          docker tag $IMAGE_REPO:$IMAGE_TAG ${{ steps.login-ecr.outputs.registry }}/$IMAGE_REPO:$IMAGE_TAG
-          docker push ${{ steps.login-ecr.outputs.registry }}/$IMAGE_REPO:$IMAGE_TAG
+          docker tag $IMAGE_REPO:$IMAGE_TAG $ECR_REGISTRY/$IMAGE_REPO:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$IMAGE_REPO:$IMAGE_TAG
 
-      - name: Update kubeconfig
+      - name: Update kubeconfig for EKS
         run: |
           aws eks update-kubeconfig --region sa-east-1 --name techchallenge-eks
 
-      - name: Deploy manifests to EKS
+      - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/db/
           kubectl apply -f k8s/app/
